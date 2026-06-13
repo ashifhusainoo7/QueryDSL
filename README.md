@@ -166,6 +166,8 @@ The DSL structurally cannot emit writes, but when pointing at a real database, c
 **Ashif Husain**
 
 - GitHub: [@ashifhusainoo7](https://github.com/ashifhusainoo7)
+- LinkedIn: [ashifhoo7](https://linkedin.com/in/ashifhoo7)
+- Email: [mdashifhusain@gmail.com](mailto:mdashifhusain@gmail.com)
 
 ---
 
