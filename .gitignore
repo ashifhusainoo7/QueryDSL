@@ -1,0 +1,4 @@
+demo.db
+.venv/
+__pycache__/
+*.pyc
