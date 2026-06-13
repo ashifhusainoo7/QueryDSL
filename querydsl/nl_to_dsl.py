@@ -43,7 +43,7 @@ def nl_to_dsl(
     base_prompt = f"{_SYSTEM}\n\nMODEL:\n{_render_model(model)}\n\nQUESTION: {question}"
 
     last_error: str | None = None
-    for attempt in range(max_retries + 1):
+    for _attempt in range(max_retries + 1):
         prompt = base_prompt
         if last_error is not None:
             prompt = f"{base_prompt}\n\nYour previous answer was invalid: {last_error}\nFix it."

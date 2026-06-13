@@ -28,7 +28,9 @@ def introspect(engine: Engine) -> Catalog:
         foreign_keys: list[ForeignKey] = []
         for fk in insp.get_foreign_keys(table_name):
             referred_table = fk["referred_table"]
-            for local_col, remote_col in zip(fk["constrained_columns"], fk["referred_columns"]):
+            for local_col, remote_col in zip(
+                fk["constrained_columns"], fk["referred_columns"], strict=True
+            ):
                 foreign_keys.append(
                     ForeignKey(column=local_col, ref_table=referred_table, ref_column=remote_col)
                 )

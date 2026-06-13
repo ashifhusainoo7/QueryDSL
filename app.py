@@ -5,13 +5,13 @@ import pandas as pd
 import streamlit as st
 from sqlalchemy import create_engine
 
-from querydsl.db import DatabaseConfig, make_engine
-from querydsl.llm import LLMConfig, make_llm
-from querydsl.introspect import introspect
-from querydsl.semantic import propose_semantic_model
-from querydsl.nl_to_dsl import nl_to_dsl, NlToDslError
 from querydsl.compiler import Compiler
+from querydsl.db import DatabaseConfig, make_engine
+from querydsl.introspect import introspect
+from querydsl.llm import LLMConfig, make_llm
 from querydsl.models import SemanticModel
+from querydsl.nl_to_dsl import NlToDslError, nl_to_dsl
+from querydsl.semantic import propose_semantic_model
 
 st.set_page_config(page_title="QueryDSL", page_icon="🧭", layout="wide")
 st.title("🧭 QueryDSL — Reliable NL Database Querying")

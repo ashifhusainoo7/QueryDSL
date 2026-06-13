@@ -2,9 +2,13 @@
 import pytest
 
 from querydsl.models import (
-    DSLQuery, Filter, Aggregation, Having, OrderBy,
+    Aggregation,
+    DSLQuery,
+    Filter,
+    Having,
+    OrderBy,
 )
-from querydsl.validate import validate, ValidationError
+from querydsl.validate import ValidationError, validate
 
 
 def test_valid_simple_query_passes(model):

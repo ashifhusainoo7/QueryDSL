@@ -1,10 +1,21 @@
 # tests/test_models.py
 import pytest
 from pydantic import ValidationError as PydanticValidationError
+
 from querydsl.models import (
-    Catalog, TableInfo, ColumnInfo, ForeignKey,
-    SemanticModel, Entity, FieldDef, Relationship,
-    DSLQuery, Filter, Aggregation, Having, OrderBy, FilterOp, AggFunc,
+    AggFunc,
+    Aggregation,
+    Catalog,
+    ColumnInfo,
+    DSLQuery,
+    Entity,
+    FieldDef,
+    Filter,
+    FilterOp,
+    ForeignKey,
+    Having,
+    SemanticModel,
+    TableInfo,
 )
 
 

@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from querydsl.models import DSLQuery
-from querydsl.nl_to_dsl import nl_to_dsl, NlToDslError
+from querydsl.nl_to_dsl import NlToDslError, nl_to_dsl
 
 
 def test_returns_valid_dsl(model):

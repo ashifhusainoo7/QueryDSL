@@ -7,7 +7,12 @@ from sqlalchemy.sql import ColumnElement
 from sqlalchemy.sql.selectable import Select
 
 from .models import (
-    AggFunc, Aggregation, DSLQuery, Entity, FilterOp, SemanticModel,
+    AggFunc,
+    Aggregation,
+    DSLQuery,
+    Entity,
+    FilterOp,
+    SemanticModel,
 )
 from .validate import validate
 

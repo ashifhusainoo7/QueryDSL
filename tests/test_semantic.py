@@ -2,8 +2,13 @@
 from unittest.mock import MagicMock
 
 from querydsl.models import (
-    Catalog, TableInfo, ColumnInfo, ForeignKey,
-    SemanticModel, Entity, FieldDef,
+    Catalog,
+    ColumnInfo,
+    Entity,
+    FieldDef,
+    ForeignKey,
+    SemanticModel,
+    TableInfo,
 )
 from querydsl.semantic import propose_semantic_model
 

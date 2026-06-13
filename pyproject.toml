@@ -2,13 +2,16 @@
 name = "querydsl"
 version = "0.1.0"
 description = "Reliable natural-language database querying via a constrained Query DSL"
+readme = "README.md"
 requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Ashif Husain" }]
+keywords = ["nlp-to-sql", "text-to-sql", "llm", "sqlalchemy", "semantic-layer", "query-dsl"]
 dependencies = [
     "pydantic>=2.6",
     "sqlalchemy>=2.0",
     "streamlit>=1.33",
     "pandas>=2.0",
-    "pyodbc>=5.0",
     "langchain-core>=0.2",
     "langchain-openai>=0.1",
     "langchain-anthropic>=0.1",
@@ -17,7 +20,21 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+# SQL Server connectivity (native dependency; only needed to connect to MSSQL).
+mssql = ["pyodbc>=5.0"]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[project.urls]
+Homepage = "https://github.com/ashifhusainoo7/QueryDSL"
+Repository = "https://github.com/ashifhusainoo7/QueryDSL"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+# pyflakes (F), pycodestyle (E/W), isort (I), pyupgrade (UP), flake8-bugbear (B)
+select = ["E", "F", "W", "I", "UP", "B"]

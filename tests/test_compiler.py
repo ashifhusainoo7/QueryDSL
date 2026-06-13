@@ -3,7 +3,11 @@ import pytest
 
 from querydsl.compiler import Compiler
 from querydsl.models import (
-    DSLQuery, Filter, Aggregation, Having, OrderBy,
+    Aggregation,
+    DSLQuery,
+    Filter,
+    Having,
+    OrderBy,
 )
 from querydsl.validate import ValidationError
 
@@ -133,7 +137,7 @@ def test_multiple_filters_combined(engine, model):
 
 def test_bad_column_mapping_raises_compile_error(engine):
     from querydsl.compiler import CompileError
-    from querydsl.models import SemanticModel, Entity, FieldDef
+    from querydsl.models import Entity, FieldDef, SemanticModel
     bad_model = SemanticModel(entities=[
         Entity(name="User", table="users", primary_key="id",
                fields=[FieldDef(name="name", column="does_not_exist", type="string")]),
