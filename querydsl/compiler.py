@@ -7,7 +7,7 @@ from sqlalchemy.sql import ColumnElement
 from sqlalchemy.sql.selectable import Select
 
 from .models import (
-    AggFunc, Aggregation, DSLQuery, Entity, Filter, FilterOp, SemanticModel,
+    AggFunc, Aggregation, DSLQuery, Entity, FilterOp, SemanticModel,
 )
 from .validate import validate
 
@@ -52,9 +52,17 @@ class Compiler:
             rel = base.relationship(rel_name)
             target = self.model.entity(rel.target)
             fdef = target.field(field_name)
-            return self._table(target).c[fdef.column]
+            return self._reflected_column(target, fdef.column)
         fdef = base.field(ref)
-        return self._table(base).c[fdef.column]
+        return self._reflected_column(base, fdef.column)
+
+    def _reflected_column(self, entity: Entity, column_name: str) -> ColumnElement:
+        table = self._table(entity)
+        if column_name not in table.c:
+            raise CompileError(
+                f"Column '{column_name}' (entity '{entity.name}') not found in table '{table.name}'"
+            )
+        return table.c[column_name]
 
     def _condition(self, col: ColumnElement, op: FilterOp, value) -> ColumnElement:
         if op is FilterOp.eq:
@@ -83,7 +91,7 @@ class Compiler:
             return fn().label(agg.alias)
         return fn(self._column(base, agg.field)).label(agg.alias)
 
-    def _refs(self, query: DSLQuery, base: Entity) -> list[str]:
+    def _refs(self, query: DSLQuery) -> list[str]:
         """All field refs that might require a join, so we can build select_from up front."""
         refs: list[str] = []
         refs += query.fields
@@ -120,7 +128,7 @@ class Compiler:
         # Joins (deduplicated by relationship name), built from declared relationships.
         joined = base_table
         seen: set[str] = set()
-        for ref in self._refs(query, base):
+        for ref in self._refs(query):
             if "." not in ref:
                 continue
             rel_name = ref.split(".", 1)[0]
@@ -151,7 +159,7 @@ class Compiler:
         # HAVING (target references an aggregation alias).
         for hav in query.having:
             element = labeled_aggs[hav.target]
-            stmt = stmt.having(self._condition(element, hav.op, hav.value))
+            stmt = stmt.having(self._condition(element.element, hav.op, hav.value))
 
         # ORDER BY (alias of an aggregation, or a field).
         for ob in query.order_by:
@@ -171,7 +179,8 @@ class Compiler:
     def run(self, query: DSLQuery) -> tuple[list[dict], str]:
         """Execute the query read-only. Returns (rows-as-dicts, generated-SQL)."""
         stmt = self.build(query)
+        sql = str(stmt.compile(self.engine, compile_kwargs={"literal_binds": True}))
         with self.engine.connect() as conn:
             result = conn.execute(stmt)
             rows = [dict(m) for m in result.mappings().all()]
-        return rows, self.to_sql(query)
+        return rows, sql

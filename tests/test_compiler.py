@@ -100,3 +100,43 @@ def test_limit_always_applied(engine, model):
 def test_invalid_query_raises_before_sql(engine, model):
     with pytest.raises(ValidationError):
         Compiler(model, engine).run(DSLQuery(entity="User", fields=["nope"]))
+
+
+def test_filter_ne(engine, model):
+    q = DSLQuery(entity="User", fields=["name"],
+                 filters=[Filter(field="company.state", op="ne", value="TX")],
+                 order_by=[OrderBy(field="name")])
+    assert [r["name"] for r in rows_for(engine, model, q)] == ["Carol"]
+
+
+def test_filter_in_list(engine, model):
+    q = DSLQuery(entity="User", fields=["name"],
+                 filters=[Filter(field="name", op="in", value=["Alice", "Carol"])],
+                 order_by=[OrderBy(field="name")])
+    assert [r["name"] for r in rows_for(engine, model, q)] == ["Alice", "Carol"]
+
+
+def test_filter_like(engine, model):
+    q = DSLQuery(entity="User", fields=["name"],
+                 filters=[Filter(field="name", op="like", value="A%")])
+    assert [r["name"] for r in rows_for(engine, model, q)] == ["Alice"]
+
+
+def test_multiple_filters_combined(engine, model):
+    q = DSLQuery(entity="User", fields=["name"],
+                 filters=[
+                     Filter(field="company.state", op="eq", value="TX"),
+                     Filter(field="lastLogin", op="is_null"),
+                 ])
+    assert [r["name"] for r in rows_for(engine, model, q)] == ["Dave"]
+
+
+def test_bad_column_mapping_raises_compile_error(engine):
+    from querydsl.compiler import CompileError
+    from querydsl.models import SemanticModel, Entity, FieldDef
+    bad_model = SemanticModel(entities=[
+        Entity(name="User", table="users", primary_key="id",
+               fields=[FieldDef(name="name", column="does_not_exist", type="string")]),
+    ])
+    with pytest.raises(CompileError):
+        Compiler(bad_model, engine).run(DSLQuery(entity="User", fields=["name"]))
