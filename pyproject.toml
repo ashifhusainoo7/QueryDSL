@@ -1,0 +1,23 @@
+[project]
+name = "querydsl"
+version = "0.1.0"
+description = "Reliable natural-language database querying via a constrained Query DSL"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",
+    "sqlalchemy>=2.0",
+    "streamlit>=1.33",
+    "pandas>=2.0",
+    "pyodbc>=5.0",
+    "langchain-core>=0.2",
+    "langchain-openai>=0.1",
+    "langchain-anthropic>=0.1",
+    "langchain-google-genai>=1.0",
+    "langchain-groq>=0.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
